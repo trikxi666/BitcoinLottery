@@ -33,14 +33,15 @@ def executeScript():
 	# Extracting the BTC amount from blockchain.info output
 	splitter1=req.text.split(":")[2]
 	splitter2=splitter1.split(",")[0]
+	print ("Amount on address: " + splitter2)
 
 	# Send amount to console for checking code
 	#print(splitter2)
 
 	# Convert satoshi to BTC
-	SatoshiConvert = float(splitter2) / 100000000.0
-	print ("Amount on address: " + str(SatoshiConvert))
-	BitcoinConvert = str(SatoshiConvert)
+	# SatoshiConvert = float(splitter2) / 100000000.0
+	# print ("Amount on address: " + str(SatoshiConvert))
+	# BitcoinConvert = str(SatoshiConvert)
 	
 	# Writing output to comma separated file
 	# text_file = open("BTC.csv", "a+")
@@ -51,7 +52,7 @@ def executeScript():
 	# Put output in SQLite database
 	conn = sqlite3.connect("lottery.db")
 	c = conn.cursor()
-	c.execute("INSERT INTO addresses (amount,btc_address,electrum_key,private_key) VALUES (?, ?, ?, ?)",(BitcoinConvert,addr,electrumPKey,priv))
+	c.execute("INSERT INTO addresses (amount,btc_address,electrum_key,private_key) VALUES (?, ?, ?, ?)",(splitter2,addr,electrumPKey,priv))
 	conn.commit()
 	conn.close()
 
