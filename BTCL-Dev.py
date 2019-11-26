@@ -1,15 +1,17 @@
 #!/usr/bin/env python
 
-# Generate bitcoin keys and address
+## ===== IMPORT MODULES ===== ##
 import requests
 from bitcoin import *
 import time
 import sqlite3
 import re
+import requests
 
 # Start timer section
 def executeScript():
     
+## ===== BTC ADDRESSES GENERATING ===== ##
 	# Generating keys
 	def create_addr():
 		priv = random_key()
@@ -25,47 +27,57 @@ def executeScript():
 	print("Private Key: " + priv)
 	print("BTC Address: " + addr)
 
+## ===== CHECK BALANCE ===== ##
 	# Get the amount of BTC on the address
+	# Address below is a checking address
+	# addr = '3Bmb9Jig8A5kHdDSxvDZ6eryj3AXd3swuJ'
 	req = requests.get('https://blockchain.info/balance?active='+(addr))
 
-	# Print output to the screen for checking code
-	#print req.text
+	# Converting url into text
+	text = req.text
 
 	# Extracting the BTC amount from blockchain.info output
-	# text = req.text
-	# left = 'final_balance":'
-	# right = ',"n_tx'
-	# btcamount = str(print(text[text.index(left)+len(left):text.index(right)]))
-	
-	# Old way of splitting (for archiving purposes)
-	pattern = '(?<=final_balance":).+?,'
-	result = re.search(pattern, req)
-	print(req[result.start():result.end() - 1])
-	
-	# splitter1=req.text.split(":")[2]
-	# btcamount=splitter1.split(",")[0]
-	# print ("Amount on address: " + btcamount)
-	# Send amount to console for checking code
+	try:
+	    btcamount = re.search('final_balance":(.+?),"n_tx', text).group(1)
+	except AttributeError:
+    		btcamount = 'no balance found' # apply your error handling here
 
-	# Convert satoshi to BTC
-	# SatoshiConvert = float(splitter2) / 100000000.0
-	# print ("Amount on address: " + str(SatoshiConvert))
-	# BitcoinConvert = str(SatoshiConvert)
+	# Convert btcamount to integer for calculation later in script
+	btcamountinteger = int(btcamount)
 
-	## OUTPUT ##
+	print ("Amount on address: " + btcamount)
+	
+## ===== OUTPUT TO DB /FILE ===== ##
 		
-	# Write output to comma separated file
+	# Write output to SQLite database
+	conn = sqlite3.connect("lottery.db")
+	c = conn.cursor()
+	c.execute("INSERT INTO addresses (amount,btc_address,electrum_key,private_key) VALUES (?, ?, ?, ?)",(btcamount,addr,electrumPKey,priv))
+	conn.commit()
+	conn.close()
+
+	# Else write output to comma separated file
 	# text_file = open("BTC.csv", "a+")
 	# text_file.write(BitcoinConvert + "," + addr + "," + electrumPKey + "," + priv)
 	# text_file.write("\n")
 	# text_file.close()
 
-	# Write output to SQLite database
-	# conn = sqlite3.connect("lottery.db")
-	# c = conn.cursor()
-	# c.execute("INSERT INTO addresses (amount,btc_address,electrum_key,private_key) VALUES (?, ?, ?, ?)",(btcamount,addr,electrumPKey,priv))
-	# conn.commit()
-	# conn.close()
+## ===== USE TELEGRAM FOR NOTIFICATION OF FOUND SATOSHI ===== ##
+	if btcamountinteger > 0:
+		def telegram_bot_sendtext(bot_message):
+			
+			# Enter your bot token and bot chat ID here for warnings with Telegram
+			bot_token = ''
+			bot_chatID = ''
+			send_text = 'https://api.telegram.org/bot' + bot_token + '/sendMessage?chat_id=' + bot_chatID + '&parse_mode=Markdown&text=' + bot_message
+
+			response = requests.get(send_text)
+
+			return response.json()
+			
+		# btcamountstring = str(btcamount)
+		telegramtext = telegram_bot_sendtext("Found BTC Address: " + addr + " with " + btcamount + " satoshi")
+		print(telegramtext)
 
 # Timer section part 2
 time.sleep(4)
