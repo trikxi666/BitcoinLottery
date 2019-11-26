@@ -12,40 +12,53 @@ import requests
 def executeScript():
     
 ## ===== BTC ADDRESSES GENERATING ===== ##
-	# Generating keys
-	def create_addr():
-		priv = random_key()
-		pub = privtopub(priv)
-		addr = pubtoaddr(pub)
-		electrumPKey = encode_privkey(priv, 'wif')
-		return addr, priv, electrumPKey
+	for i in range(0, 10):
+		# Generating keys
+		def create_addr():
+			priv = random_key()
+			pub = privtopub(priv)
+			addr = pubtoaddr(pub)
+			electrumPKey = encode_privkey(priv, 'wif')
+			return addr, priv, electrumPKey
 
-	addr,priv,electrumPKey = create_addr()
+		addr,priv,electrumPKey = create_addr()
 
-	# Print keys to console (for checking code)
-	print("Electrum Import Key: " + electrumPKey)
-	print("Private Key: " + priv)
-	print("BTC Address: " + addr)
+		# Print keys to console (for checking code)
+		print("BTC Address: " + addr)
+		print("Private Key: " + priv)
+		print("Electrum Import Key: " + electrumPKey)
 
-## ===== CHECK BALANCE ===== ##
-	# Get the amount of BTC on the address
-	# Address below is a checking address
-	# addr = '3Bmb9Jig8A5kHdDSxvDZ6eryj3AXd3swuJ'
-	req = requests.get('https://blockchain.info/balance?active='+(addr))
+	## ===== CHECK BALANCE ===== ##
+		# Get the amount of BTC on the address
+		# Address below is a checking address
+		# addr = '3Bmb9Jig8A5kHdDSxvDZ6eryj3AXd3swuJ'
+		req = requests.get('https://blockchain.info/balance?active='+(addr))
 
-	# Converting url into text
-	text = req.text
+		# Converting url into text
+		text = req.text
 
-	# Extracting the BTC amount from blockchain.info output
-	try:
-	    btcamount = re.search('final_balance":(.+?),"n_tx', text).group(1)
-	except AttributeError:
-    		btcamount = 'no balance found' # apply your error handling here
+		# Old code do not remove yet
+		# # Extracting the BTC amount from blockchain.info output
+		# try:
+		#     btcamount = re.search('final_balance":(.+?),"n_tx', text).group(1)
+		# except:
+		# 	btcamount = None
+		# # 		btcamount = 'no balance found' # apply your error handling here
+		
+		# New error handling code here
+		try:
+			btcamount = re.search('final_balance":(.+?),"n_tx', text).group(1)
+		except ValueError:
+			print("Try #{} failed with ValueError: Sleeping for 2 secs before next try:".format(i))
+			time.sleep(2)
+			continue
+		break
 
 	# Convert btcamount to integer for calculation later in script
 	btcamountinteger = int(btcamount)
 
 	print ("Amount on address: " + btcamount)
+	print ("==================================================================================")
 	
 ## ===== OUTPUT TO DB /FILE ===== ##
 		
