@@ -90,7 +90,7 @@ Follow the procedure below to create a channel for signalling found Satoshi's:
 You can run the script in your terminal with this command:
 
 ```bash
-./BitcoinLottery.py
+./run_lottery.py
 ```
 
 ### Windows
@@ -98,7 +98,7 @@ You can run the script in your terminal with this command:
 Just run the line below in a command prompt in the directory of the script:
 
 ```bash
-py ./BitcoinLottery.py
+py ./run_lottery.py
 ```
 
 ## SQLite
@@ -106,27 +106,20 @@ py ./BitcoinLottery.py
 To quickly find an address with an amount higher than 0, use the following sql statement in the SQLite console:
 
 ```sql
-SELECT * FROM addresses WHERE  amount > 0;
+SELECT btc_address,electrum_key,private_key,amount FROM addresses WHERE  amount > 0;
 ```
 
-When Satoshi are found, you can find the address in the database with this command:
+## Running in the background
 
-```sql
-SELECT electrum_key, private_key, amount FROM addresses WHERE  btc_address = "<the address found>";
+### Linux
+
+To let the script run in the background, use the following command:
+
+```bash
+nohup ./run_lottery.py &
 ```
 
-## Daemonizing the script in Linux
-
-To run the script as a background service (Daemon) in Linux, do the following:
-
-* Copy the ``BitcoinLottery.sh`` file to ``/etc/init.d/BitcoinLottery.sh``. Check if the directories are valid. 
-* Optional: copy the BitcoinLottery.py script to a generic script location (e.g. /usr/local/bin). Note that you have to change the SQLite database location as well.
-* Make both files executable with ``sudo chmod 777 ./BitcoinLottery.py /etc/init.d/BitcoinLottery.sh``
-* Add the service for autostart when booting with ``sudo update-rc.d /etc/init.d/BitcoinLottery.sh defaults``
-* To remove the service from autostart, run ``sudo update-rc.d -f /etc/init.d/BitcoinLottery.sh remove``
-* If you change the bash script, you can reload it with the command ``sudo systemctl daemon-reload``
-
-For now I use this quick and dirty method of runing the script in the background.
+Another method is running it in a virtual terminal:
 
 ```bash
 # Create a new virtual terminal
@@ -141,3 +134,7 @@ screen -r btcl
 
 Close your terminal screen. The BitcoinLottery PID belongs to the virtual terminal and keeps running.  
 To check the script, run ''screen -r btcl'' again
+
+### Windows
+
+Have not found a way yet and no rush to find one because I use Linux.

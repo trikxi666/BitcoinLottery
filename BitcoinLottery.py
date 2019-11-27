@@ -11,7 +11,7 @@ import requests
 # Start timer section
 def executeScript():
     
-## ===== BTC ADDRESSES GENERATING ===== ##
+	## ===== BTC ADDRESSES GENERATING ===== ##
 	# Generating keys
 	def create_addr():
 		priv = random_key()
@@ -22,15 +22,8 @@ def executeScript():
 
 	addr,priv,electrumPKey = create_addr()
 
-	# Print keys to console (for checking code)
-	print("Electrum Import Key: " + electrumPKey)
-	print("Private Key: " + priv)
-	print("BTC Address: " + addr)
-
-## ===== CHECK BALANCE ===== ##
+	## ===== CHECK BALANCE ===== ##
 	# Get the amount of BTC on the address
-	# Address below is a checking address
-	# addr = '3Bmb9Jig8A5kHdDSxvDZ6eryj3AXd3swuJ'
 	req = requests.get('https://blockchain.info/balance?active='+(addr))
 
 	# Converting url into text
@@ -39,16 +32,20 @@ def executeScript():
 	# Extracting the BTC amount from blockchain.info output
 	try:
 	    btcamount = re.search('final_balance":(.+?),"n_tx', text).group(1)
-	except AttributeError:
-    		btcamount = 'no balance found' # apply your error handling here
+	except:
+			executeScript()
 
 	# Convert btcamount to integer for calculation later in script
 	btcamountinteger = int(btcamount)
 
-	print ("Amount on address: " + btcamount)
-	
-## ===== OUTPUT TO DB /FILE ===== ##
-		
+	# Print keys to console (for checking code)
+	print("BTC Address: " + addr)
+	print("Electrum Import Key: " + electrumPKey)
+	print("Private Key: " + priv)
+	print("Amount on address: " + btcamount)
+	print('=============================================================================')
+
+	## ===== OUTPUT TO DB /FILE ===== ##
 	# Write output to SQLite database
 	conn = sqlite3.connect("lottery.db")
 	c = conn.cursor()
@@ -62,7 +59,7 @@ def executeScript():
 	# text_file.write("\n")
 	# text_file.close()
 
-## ===== USE TELEGRAM FOR NOTIFICATION OF FOUND SATOSHI ===== ##
+	## ===== USE TELEGRAM FOR NOTIFICATION OF FOUND SATOSHI ===== ##
 	if btcamountinteger > 0:
 		def telegram_bot_sendtext(bot_message):
 			

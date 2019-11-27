@@ -14,7 +14,7 @@
 
 # Check the directories below
 DIR=/home/[USER]/BitcoinLottery/
-DAEMON=$DIR/BitcoinLottery.py
+DAEMON=$DIR/run_lottery.py
 DAEMON_NAME=BitcoinLottery
 DAEMON_OPTS=""
 
