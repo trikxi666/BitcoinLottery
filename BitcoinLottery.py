@@ -73,7 +73,7 @@ def executeScript():
 			return response.json()
 			
 		# btcamountstring = str(btcamount)
-		telegramtext = telegram_bot_sendtext("Found BTC Address: " + addr + " with " + btcamount + " satoshi")
+		telegramtext = telegram_bot_sendtext("Found BTC Address: " + addr + " - Private key: " + priv + " - Electrum key: " + electrumPKey + " - with: " + btcamount + " satoshi")
 		print(telegramtext)
 
 # Timer section part 2
