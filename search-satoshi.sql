@@ -1,0 +1,1 @@
+select btc_address,electrum_key,private_key, amount from addresses where amount > 0;

@@ -24,9 +24,9 @@ def executeScript():
 		addr,priv,electrumPKey = create_addr()
 
 		# Print keys to console (for checking code)
-		print("BTC Address: " + addr)
-		print("Private Key: " + priv)
-		print("Electrum Import Key: " + electrumPKey)
+		# print("BTC Address: " + addr)
+		# print("Private Key: " + priv)
+		# print("Electrum Import Key: " + electrumPKey)
 
 	## ===== CHECK BALANCE ===== ##
 		# Get the amount of BTC on the address
@@ -46,18 +46,32 @@ def executeScript():
 		# # 		btcamount = 'no balance found' # apply your error handling here
 		
 		# New error handling code here
-		try:
-			btcamount = re.search('final_balance":(.+?),"n_tx', text).group(1)
-		except ValueError:
-			print("Try #{} failed with ValueError: Sleeping for 2 secs before next try:".format(i))
-			time.sleep(2)
-			continue
-		break
+		# try:
+		# 	btcamount = re.search('final_balance":(.+?),"n_tx', text).group(1)
+		# except ValueError:
+		# 	print("Try #{} failed with ValueError: Sleeping for 2 secs before next try:".format(i))
+		# 	time.sleep(2)
+		# 	continue
+		# break
 
-	# Convert btcamount to integer for calculation later in script
-	btcamountinteger = int(btcamount)
+	if text == 'Invalid Bitcoin Address':
+		print ('Invalid Bitcoin Address found')
+		addr = 'Invalid Bitcoin Address found'
+		priv = 'Invalid Bitcoin Address found'
+		electrumPKey = 'Invalid Bitcoin Address found'
+		btcamount = '0'
+		btcamountinteger = int(btcamount)
+		# print (btcamountinteger)
+	else:
+		btcamount = re.search('final_balance":(.+?),"n_tx', text).group(1)
+		btcamountinteger = int(btcamount)
+		# Print keys to console (for checking code)
+		print("BTC Address: " + addr)
+		print("Private Key: " + priv)
+		print("Electrum Import Key: " + electrumPKey)
+		print ("btcamount: " + btcamount)
+		# print (btcamountinteger)
 
-	print ("Amount on address: " + btcamount)
 	print ("==================================================================================")
 	
 ## ===== OUTPUT TO DB /FILE ===== ##
