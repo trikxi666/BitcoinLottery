@@ -1,6 +1,6 @@
 # BitcoinLottery
 
-Python script to generate BTC adresses in the hope one with actual btc will be found
+Python script to generate random BTC adresses. If you find an address with wallet balance, you win!
 
 ## Requirements
 
@@ -9,20 +9,14 @@ Python script to generate BTC adresses in the hope one with actual btc will be f
 The following packages have to be installed to make the lottery work:
 
 * sudo apt install python-pip
-* pip install blockstack
 * pip install bitcoin
-* sudo apt install sqlite3
-* sudo apt install sqlitebrowser
-* apt-get install screen
 
 ### Windows
 
 The following software has to be installed on Windows 10 for this script to work
 
 * Download and install the latest stable [Python3 for Windows](https://www.python.org/downloads/windows/)(Current stable version is 3.8.0).
-* py -m pip install requests
 * py -m pip install bitcoin
-* Download SQLite from the [download page of the SQlite official website](https://www.sqlite.org/download.html). Follow the instructions on the [Download & Install SQLite tools](https://www.sqlitetutorial.net/download-install-sqlite/) page.
 
 ## Downloading the BitcoinLottery Python script
 
@@ -35,32 +29,6 @@ git clone https://github.com/Willemstijn/BitcoinLottery.git
 Or download and extract:
 
 https://github.com/Willemstijn/BitcoinLottery/archive/master.zip
-
-## Create a SQLite database for storing found keys
-
-Create the database with the following commands
-
-```bash
-# Create new database in the directory
-sqlite3 lottery.db
-
-# Create table in the database
-CREATE TABLE addresses ( 
-amount INT NOT NULL, 
-btc_address VARCHAR(50), 
-electrum_key VARCHAR(70), 
-private_key VARCHAR(80), 
-PRIMARY KEY (btc_address) );
-
-# Show the tables with
-.tables
-
-# Show the table schema with
-.schema addresses
-
-# Quit sqlite
-.quit
-```
 
 ## Setting up a Telegram bot
 
@@ -101,14 +69,6 @@ Just run the line below in a command prompt in the directory of the script:
 py ./run_lottery.py
 ```
 
-## SQLite
-
-To quickly find an address with an amount higher than 0, use the following sql statement in the SQLite console:
-
-```sql
-SELECT btc_address,electrum_key,private_key,amount FROM addresses WHERE  amount > 0;
-```
-
 ## Running in the background
 
 ### Linux
@@ -119,7 +79,7 @@ To let the script run in the background, use the following command:
 nohup ./run_lottery.py &
 ```
 
-Another method is running it in a virtual terminal:
+OPTIONAL: Another method is running it in a virtual terminal:
 
 ```bash
 # Create a new virtual terminal
@@ -137,4 +97,29 @@ To check the script, run ''screen -r btcl'' again
 
 ### Windows
 
-Have not found a way yet and no rush to find one because I use Linux.
+Have not found a way yet and no rush to find one because I use Linux. Guess you'll have to leave a terminal session open during the lottery.
+
+## Addendum
+
+The url's below provide API's to check the balance of a bitcoin address. 
+These url's come from: https://bitcointalk.org/index.php?topic=1605809.0
+
+**Confirmed**:
+
+https://blockchain.info/q/addressbalance/<address>
+https://www.bitgo.com/api/v1/address/<address>
+
+
+Unconfirmed:****
+
+http://btc.blockr.io/api/v1/address/info/
+https://blockexplorer.com/api/addr/
+https://bitcoin.toshi.io/api/v0/addresses/
+https://chain.api.btc.com/v3/address/
+https://api.blocktrail.com/v1/btc/address/1NcXPMRaanz43b1kokpPuYDdk6GGDvxT2T?api_key=MY_APIKEY
+https://api.blockcypher.com/v1/btc/main/addrs/1DEP8i3QJCsomS4BSMY2RpU1upv62aGvhD/balance
+https://api-r.bitcoinchain.com/v1/address/1Chain4asCYNnLVbvG6pgCLGBrtzh4Lx4b
+https://api.kaiko.com/v1/addresses/3Nt1smucEdFks8uYQhyGvXGBuocTcMSmsT
+https://chainflyer.bitflyer.jp/v1/address/1LDWeSRJukN7zWXDBpuvB2WGsMxYE7UTnQ
+https://insight.bitpay.com/api/addr/1NcXPMRaanz43b1kokpPuYDdk6GGDvxT2T/?noTxList=1
+https://api.coinprism.com/v1/addresses/1dice97ECuByXAvqXpaYzSaQuPVvrtmz6
