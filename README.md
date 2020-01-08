@@ -10,6 +10,7 @@ The following packages have to be installed to make the lottery work:
 
 * sudo apt install python-pip
 * pip install bitcoin
+* pip install requests
 
 ### Windows
 
@@ -89,7 +90,7 @@ screen -dmS btcl
 screen -r btcl
 
 # Run the script
-./BitcoinLottery.py
+./run_lottery.py
 ```
 
 Close your terminal screen. The BitcoinLottery PID belongs to the virtual terminal and keeps running.  
