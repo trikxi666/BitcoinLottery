@@ -24,7 +24,7 @@ The following software has to be installed on Windows 10 for this script to work
 Clone or download the code to your computer:
 
 ```bash
-git clone https://github.com/Willemstijn/BitcoinLottery.git
+git clone https://github.com/trikxi666/BitcoinLottery.git
 ```
 
 Or download and extract:
