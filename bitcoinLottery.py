@@ -1,7 +1,8 @@
 #!/usr/bin/env python
 
 ## ===== IMPORT MODULES ===== ##
-import requests, time
+import requests
+import time
 from bitcoin import *
 
 def executeScript():
@@ -38,8 +39,8 @@ def executeScript():
         def telegram_bot_sendtext(bot_message):
             
             # Enter your bot token and bot chat ID here for warnings with Telegram
-            bot_token = ''
-            bot_chatID = ''
+            bot_token = '1036043632:AAFzEDK8dKHjFClJFVMaZk-3QQbdm3zSx10'
+            bot_chatID = '945572687'
             send_text = 'https://api.telegram.org/bot' + bot_token + '/sendMessage?chat_id=' + bot_chatID + '&parse_mode=Markdown&text=' + bot_message
 
             response = requests.get(send_text)
